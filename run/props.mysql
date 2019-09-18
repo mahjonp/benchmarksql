@@ -1,13 +1,13 @@
 db=mysql
 driver=com.mysql.jdbc.Driver
-conn=jdbc:mysql://localhost:4000/tpcc?useSSL=false&useServerPrepStmts=true&useConfigs=maxPerformance
+conn=jdbc:mysql://127.0.0.1:4000/tpcc?useSSL=false&useServerPrepStmts=true&useConfigs=maxPerformance
 user=root
 password=
 
-warehouses=1
-loadWorkers=4
+warehouses=1000
+loadWorkers=32
 
-terminals=1
+terminals=500
 //To run specified transactions per terminal- runMins must equal zero
 runTxnsPerTerminal=0
 //To run for specified minutes- runTxnsPerTerminal must equal zero
