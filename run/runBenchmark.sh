@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [ $# -ne 1 ] ; then
-    echo "usage: $(basename $0) PROPS_FILE" >&2
+if [ $# -lt 1 ] ; then
+    echo "usage: $(basename $0) PROPS_FILE true/false" >&2
     exit 2
 fi
 
@@ -16,6 +16,11 @@ source funcs.sh $1
 
 setCP || exit 1
 
-myOPTS="-Dprop=$1 -DrunID=${SEQ}"
+forUpdate="false"
 
+if [[ -n $2 ]]; then
+    forUpdate=$2
+fi
+
+myOPTS="-Dprop=$1 -DrunID=${SEQ} -DforUpdate=${forUpdate}"
 java -cp "$myCP" $myOPTS jTPCC

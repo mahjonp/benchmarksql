@@ -59,6 +59,12 @@ public class jTPCCConnection
 	this.dbConn = dbConn;
 	this.dbType = dbType;
 
+	boolean forUpdate = false;
+	String forUpdateStr = System.getProperty("forUpdate");
+	if ("true".equals(forUpdateStr)) {
+		forUpdate = true;
+	}
+
 	// PreparedStataments for NEW_ORDER
 	stmtNewOrderSelectWhseCust = dbConn.prepareStatement(
 		"SELECT c_discount, c_last, c_credit, w_tax " +
@@ -227,12 +233,18 @@ public class jTPCCConnection
 		break;
 	}
 
+	if (forUpdate) {
+		forUpdateStr = "    FOR UPDATE";
+	} else {
+		forUpdateStr = "";
+	}
+
 	// PreparedStatements for DELIVERY_BG
 	stmtDeliveryBGSelectOldestNewOrder = dbConn.prepareStatement(
 		"SELECT no_o_id " +
 		"    FROM bmsql_new_order " +
 		"    WHERE no_w_id = ? AND no_d_id = ? " +
-		"    ORDER BY no_o_id ASC");
+		"    ORDER BY no_o_id ASC" + forUpdateStr);
 	stmtDeliveryBGDeleteOldestNewOrder = dbConn.prepareStatement(
 		"DELETE FROM bmsql_new_order " +
 		"    WHERE no_w_id = ? AND no_d_id = ? AND no_o_id = ?");
