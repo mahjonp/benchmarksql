@@ -244,7 +244,8 @@ public class jTPCCConnection
 		"SELECT no_o_id " +
 		"    FROM bmsql_new_order " +
 		"    WHERE no_w_id = ? AND no_d_id = ? " +
-		"    ORDER BY no_o_id ASC" + forUpdateStr);
+		"    ORDER BY no_o_id ASC" +
+		"    LIMIT 1" + forUpdateStr);
 	stmtDeliveryBGDeleteOldestNewOrder = dbConn.prepareStatement(
 		"DELETE FROM bmsql_new_order " +
 		"    WHERE no_w_id = ? AND no_d_id = ? AND no_o_id = ?");
