@@ -726,26 +726,28 @@ public class jTPCC implements jTPCCConfig
 	{
 	    StringBuilder informativeText = new StringBuilder("");
 	    Formatter fmt = new Formatter(informativeText);
-	    double tpmC = (6000000*fastNewOrderCounter/(currTimeMillis - sessionStartTimestamp))/100.0;
-	    double tpmTotal = (6000000*transactionCount/(currTimeMillis - sessionStartTimestamp))/100.0;
+		double tpmC = (6000000*fastNewOrderCounter/(currTimeMillis - sessionStartTimestamp))/100.0;
+		double recentTpmC = fastNewOrderCounter - sessionNextKounter;
+		double tpmTotal = (6000000*transactionCount/(currTimeMillis - sessionStartTimestamp))/100.0;
 
-	    sessionNextTimestamp += 1000;  /* update this every seconds */
+	    sessionNextTimestamp += 1000 * 60;  /* update this every minutes*/
 
-	    fmt.format("Term-00, Running Average tpmTOTAL: %.2f", tpmTotal);
+		fmt.format("Term-00, Running Average tpmTOTAL: %.2f", tpmTotal);
+		
 
 	    /* XXX What is the meaning of these numbers? */
-	    recentTpmC = (fastNewOrderCounter - sessionNextKounter) * 12;
-	    recentTpmTotal= (transactionCount-sessionNextKounter)*12;
+	    // recentTpmC = (fastNewOrderCounter - sessionNextKounter) * 12;
+		// recentTpmTotal= (transactionCount-sessionNextKounter)*12;
 	    sessionNextKounter = fastNewOrderCounter;
-	    fmt.format("    Current tpmTOTAL: %d", recentTpmTotal);
+	    fmt.format("    Current tpmC: %.2f", recentTpmC);
+	   // fmt.format("    Current tpmTOTAL: %d", recentTpmTotal);
 
 	    long freeMem = Runtime.getRuntime().freeMemory() / (1024*1024);
 	    long totalMem = Runtime.getRuntime().totalMemory() / (1024*1024);
-	    fmt.format("    Memory Usage: %dMB / %dMB          ", (totalMem - freeMem), totalMem);
+	    fmt.format("    Memory Usage: %dMB / %dMB\n", (totalMem - freeMem), totalMem);
 
 	    System.out.print(informativeText);
-	    for (int count = 0; count < 1+informativeText.length(); count++)
-		System.out.print("\b");
+	    // for (int count = 0; count < 1+informativeText.length(); count++) System.out.print("\b");
 	}
     }
 }
